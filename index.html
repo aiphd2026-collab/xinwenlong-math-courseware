@@ -497,6 +497,13 @@
             ]]
         ];
 
+        // 正式课件链接；未发布的章节继续保留原有展开功能。
+        const chapterLinks = {
+            '初一上册|1. 完整数': 'https://aiphd2026-collab.github.io/xinwenlong-math-courseware/%E5%88%9D%E4%B8%80%E4%B8%8A%E5%86%8C_%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E5%AE%8C%E6%95%B4%E6%95%B0.html',
+            '初三上册|1. 变数法': 'https://aiphd2026-collab.github.io/xinwenlong-math-courseware/%E5%88%9D%E4%B8%89%E4%B8%8A%E5%86%8C_%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E5%8F%98%E6%95%B0%E6%B3%95.html',
+            '初三上册|2. 指数与对数': 'https://aiphd2026-collab.github.io/xinwenlong-math-courseware/%E5%88%9D%E4%B8%89%E4%B8%8A%E5%86%8C_%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E6%8C%87%E6%95%B0%E4%B8%8E%E5%AF%B9%E6%95%B0.html',
+        };
+
         const sectionMap = new Map();
         books.forEach(([bookName, chapters]) => {
             chapters.forEach(([chapterTitle, sections]) => {
@@ -550,7 +557,7 @@
                 let visible = chs.filter(c => !key || (c[0] + ' ' + c[1].join(' ')).toLowerCase().includes(key));
                 if (!visible.length) return '';
                 shown += visible.length;
-                return `<article class="book"><button onclick="this.nextElementSibling.classList.toggle('hidden')"><span class="book-label"><span class="icon">📘</span>${name}</span><small>${visible.length} 章</small></button><div class="chapters">${visible.map(([t, ss]) => `<details class="chapter"><summary><span class="ch-icon">📖</span>${t}</summary><ul>${ss.map(s => `<li><a onclick="jumpToSection('${s.replace(/'/g, "\\'")}')">${s}</a></li>`).join('')}</ul></details>`).join('')}</div></article>`
+                return `<article class="book"><button onclick="this.nextElementSibling.classList.toggle('hidden')"><span class="book-label"><span class="icon">📘</span>${name}</span><small>${visible.length} 章</small></button><div class="chapters">${visible.map(([t, ss]) => `<details class="chapter"><summary><span class="ch-icon">📖</span>${chapterLinks[name + '|' + t] ? `<a href="${chapterLinks[name + '|' + t]}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" style="color:var(--blue);text-decoration:underline;text-underline-offset:4px">${t} ↗</a>` : t}</summary><ul>${ss.map(s => `<li><a onclick="jumpToSection('${s.replace(/'/g, "\\'")}')">${s}</a></li>`).join('')}</ul></details>`).join('')}</div></article>`
             }).join('');
             count.textContent = `显示 ${shown} 个章节`;
         }
